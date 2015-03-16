@@ -1,1 +1,7 @@
-## Place your answers here.
+## Place your answers here
+
+Exercise 2:
+Solution: All other buffer overflow can be exploited in this manner.
+
+Exercise 4:
+Solution: Other buffer overflow vulnerabilities can be exploited in the same manner.

@@ -1,7 +1,28 @@
 ## Place your answers here
 
 Exercise 2:
-Solution: All other buffer overflow can be exploited in this manner.
+Solution: The last 4 buffer overflows can be exploited in this manner.
 
 Exercise 4:
-Solution: Other buffer overflow vulnerabilities can be exploited in the same manner.
+Solution: Other buffer overflow vulnerabilities can be exploited in the same manner, except fot the first two.
+
+Exercise 5:
+I find it hard to find more bugs, excluding the bugs found in bugs.txt.
+I just use 2 bugs previously found.
+
+1) the "reqpath" can be overflowed to hijiack the control flow.
+   the limitation is obvious: it depends on the convetion of the c calling and the stupid "ret" instruction.
+   the attacker can use overflow the "reqpath" to hijack the control of flow, which is dangerous.
+   Various ways can be used to prevent it, including ASLR and stack canary.
+   I could simply use the boundry check to fix the bug. 
+
+2) the "value" also can be overflowed to hijijack the control flow.
+   Same limitiantion, prevention.
+
+Exercise 6:
+Some type modifications are showed below.
+
+1) sprinf --> snprinf
+2) int buf[1024] --> static int buf[1024]
+3) strcat --> strncat
+

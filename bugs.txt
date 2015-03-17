@@ -3,17 +3,14 @@
 # desc
 #
 
-[http.c:282]
-The 'pn' can be overflowed when concatenated with the argument 'name'.
-
-    GET /t?00...(all 2000 0's) HTTP/1.0
+[http.c:311]
+The 'buf' could be overflowed when be formated.
 
 
+[http.c:353]
 
-[http.c:1512]
-another description.
+The "name" could be overflowed with inappropriate request path.
 
-    <paste offending line(s) of code here>
 
 [http.c:120]
 The 'value' variable can be overwirtten by a filed value in the HTTP request header.

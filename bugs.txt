@@ -3,15 +3,38 @@
 # desc
 #
 
-[zookd.c:1612]
-description goes here. for example, the 'buf' variable can be
-overwritten by the 'msg' variable because ...
+[http.c:311]
+The 'buf' could be overflowed when be formated.
 
-    <paste offending line(s) of code here>
 
-[http.c:1512]
-another description.
+[http.c:353]
 
-    <paste offending line(s) of code here>
+The "name" could be overflowed with inappropriate request path.
 
-# many more come here
+
+[http.c:120]
+The 'value' variable can be overwirtten by a filed value in the HTTP request header.
+input: 
+
+    GET / HTTP/1.0
+    Code:%3A%20000.....(all 513 0's))    
+
+
+[http.c:121]
+Same with the 'value' variable, 'envvar' variable can be overwritten by a header field whose name is not the 'CONTENT_TYPE' or 'CONTENT_LENGTH' .
+
+    GET / HTTP/1.0
+    Code:%3A%20000...(all 1500 0's)
+    
+
+[http.c:276]
+The 'pn' variable could be overwritten by the input name.
+
+    GET /0000....(1500 0's) HTTP/1.0
+
+[zookd.c:65]
+The 'reqpath' variable can be overwritten.
+
+    GET /0000...(3000 0's) HTTP/1.0
+
+

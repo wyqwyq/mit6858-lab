@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <sys/wait.h>
 #include <err.h>
+#include <errno.h>
 #include <grp.h>
 #include <fcntl.h>
 #include <netdb.h>
@@ -144,16 +145,39 @@ pid_t launch_svc(CONF *conf, const char *name)
                     break;
     }
 
-    if (NCONF_get_number_e(conf, name, "uid", &uid))
+    if ((dir = NCONF_get_string(conf, name, "dir")))
     {
-        /* change real, effective, and saved uid to uid */
-        warnx("setuid %ld", uid);
+        /* chroot into dir */
+        /* First we create the jail directory if it doesn't exist*/ 
+        struct stat sbuf;
+        if (stat(dir,&sbuf)<0) {  
+            if (errno==ENOENT) {  
+                if (mkdir(dir,0755)<0){
+                    errx(1,"Failed to create %s - %s\n", dir, strerror(errno));  
+                    //exit(1);  
+                }  
+            } else {  
+                errx(1,"Failed to stat %s - %s\n", dir, strerror(errno));
+                //exit(1);
+            }  
+        } else if (!S_ISDIR(sbuf.st_mode)) {  
+            errx(1,"Error - %s is not a directory!\n", dir);  
+            //exit(1);  
+        }
+        if (chdir(dir)<0) {  
+            errx(1,"Failed to change directory %s - %s\n", dir ,strerror(errno));
+        } 
+        if (chroot(dir)<0) {  
+            errx(1,"Failed to chroot to %s - %s\n", dir, strerror(errno));  
+            //exit(1);
+        } 
     }
 
     if (NCONF_get_number_e(conf, name, "gid", &gid))
     {
         /* change real, effective, and saved gid to gid */
         warnx("setgid %ld", gid);
+        setresgid(gid, gid, gid);
     }
 
     if ((groups = NCONF_get_string(conf, name, "extra_gids")))
@@ -163,16 +187,18 @@ pid_t launch_svc(CONF *conf, const char *name)
         /* set the grouplist to gids */
         for (i = 0; i < ngids; i++)
             warnx("extra gid %d", gids[i]);
+        setgroups(ngids, gids);
     }
 
-    if ((dir = NCONF_get_string(conf, name, "dir")))
+    if (NCONF_get_number_e(conf, name, "uid", &uid))
     {
-        /* chroot into dir */
+        /* change real, effective, and saved uid to uid */
+        warnx("setuid %ld", uid);
+        setresuid(uid, uid, uid);
     }
 
     signal(SIGCHLD, SIG_DFL);
     signal(SIGPIPE, SIG_DFL);
-
     execv(argv[0], argv);
     err(1, "execv %s %s", argv[0], argv[1]);
 }

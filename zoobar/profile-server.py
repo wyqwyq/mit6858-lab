@@ -9,6 +9,7 @@ import hashlib
 import socket
 import bank
 import zoodb
+import base64
 
 from debug import *
 
@@ -20,6 +21,10 @@ class ProfileAPIServer(rpclib.RpcServer):
     def __init__(self, user, visitor):
         self.user = user
         self.visitor = visitor
+        self.uid = 61016
+        self.gid = 61012
+        os.setresgid(self.gid, self.gid, self.gid)
+        os.setresuid(self.uid, self.uid, self.uid)
 
     def rpc_get_self(self):
         return self.user
@@ -48,7 +53,7 @@ class ProfileAPIServer(rpclib.RpcServer):
                }
 
     def rpc_xfer(self, target, zoobars):
-        bank.transfer(self.user, target, zoobars)
+        bank.transfer(self.user, target, zoobars, "")
 
 def run_profile(pcode, profile_api_client):
     globals = {'api': profile_api_client}
@@ -56,10 +61,12 @@ def run_profile(pcode, profile_api_client):
 
 class ProfileServer(rpclib.RpcServer):
     def rpc_run(self, pcode, user, visitor):
-        uid = 0
-
-        userdir = '/tmp'
-
+        uid = 61015
+        userdir = '/tmp/' + base64.b64encode(user)
+        if not os.path.exists(userdir):
+            os.mkdir(userdir, 0777)
+            os.chmod(userdir, 0777)
+        os.chdir(userdir)
         (sa, sb) = socket.socketpair(socket.AF_UNIX, socket.SOCK_STREAM, 0)
         pid = os.fork()
         if pid == 0:

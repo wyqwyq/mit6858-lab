@@ -59,6 +59,7 @@ int main(int argc, char **argv)
         case -1: /* error */
             err(1, "fork");
         case 0:  /* child */
+            /*warnx("child process[pid%d, gid%d]", getpid(), getgid());*/
             process_client(cltfd);
             return 0;
         default: /* parent */

@@ -43,7 +43,7 @@ cp -r /usr/lib/python2.7 /jail/usr/lib
 cp /usr/lib/i386-linux-gnu/libsqlite3.so.0 /jail/usr/lib/i386-linux-gnu
 cp /lib/i386-linux-gnu/libnss_dns.so.2 /jail/lib/i386-linux-gnu
 cp /lib/i386-linux-gnu/libresolv.so.2 /jail/lib/i386-linux-gnu
-cp -r /lib/resolvconf /jail/lib
+cp -r /lib/resolvconf /jail/libG
 
 mkdir -p /jail/usr/local/lib
 cp -r /usr/local/lib/python2.7 /jail/usr/local/lib
@@ -67,6 +67,39 @@ mknod /jail/dev/urandom c 1 9
 cp -r zoobar /jail/
 rm -rf /jail/zoobar/db
 
+mkdir -p /jail/auth_svc
+chmod a+rwx /jail/auth_svc
+
+mkdir -p /jail/bank_svc
+chmod a+rwx /jail/bank_svc
+
+mkdir -p /jail/profilesvc
+chmod a+rwx /jail/profilesvc
+
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-transfer
+python /jail/zoobar/zoodb.py init-cred
+python /jail/zoobar/zoodb.py init-bank
+# set_perms 61012:61012 755 /jail/zoobar/db
+set_perms 61010:61012 775 /jail/zoobar/db
+set_perms 0:61012 770 /jail/zoobar/db/person
+set_perms 0:61012 770 /jail/zoobar/db/transfer
+set_perms 61010:61010 700 /jail/zoobar/db/cred
+set_perms 61014:61014 700 /jail/zoobar/db/bank
 
+set_perms 0:61012 660 /jail/zoobar/db/person/person.db
+set_perms 0:61012 660 /jail/zoobar/db/transfer/transfer.db
+set_perms 61010:61010 600 /jail/zoobar/db/cred/cred.db
+set_perms 61014:61014 600 /jail/zoobar/db/bank/bank.db
+
+chown -R  0:61013 /jail/zoobar/media
+chown -R  0:61013 /jail/zoobar/templates
+chmod -R  660 /jail/zoobar/media/*
+chmod -R  660 /jail/zoobar/templates/*
+find /jail/zoobar -maxdepth 1  -name \*.py  -exec chown 0:61012 {} \; 
+find /jail/zoobar -maxdepth 1  -name \*.pyc -exec chown 0:61012 {} \; 
+find /jail/zoobar -maxdepth 1  -name \*.cgi -exec chown 61012:61012 {} \; 
+find /jail/zoobar -maxdepth 1  -name \*.py  -exec chmod 774 {} \;
+find /jail/zoobar -maxdepth 1  -name \*.pyc -exec chmod 774 {} \;
+find /jail/zoobar -maxdepth 1  -name \*.cgi -exec chmod 774 {} \;
+set_perms 61014:61014 700 /jail/zoobar/bank-server.py

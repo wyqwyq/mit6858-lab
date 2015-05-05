@@ -189,6 +189,13 @@ class sym_minus(sym_binop):
 
 ## Exercise 2: your code here.
 ## Implement AST nodes for division and multiplication.
+class sym_division(sym_binop):
+  def _z3expr(self, printable):
+    return z3expr(self.a, printable) / z3expr(self.b, printable)
+
+class sym_multiplication(sym_binop):
+  def _z3expr(self, printable):
+    return z3expr(self.a, printable) * z3expr(self.b, printable)
 
 ## String operations
 
@@ -483,6 +490,14 @@ class concolic_int(int):
   ## Exercise 2: your code here.
   ## Implement symbolic division and multiplication.
 
+  def __mul__(self, o):
+    res = self.__v * o
+    return concolic_int(sym_multiplication(ast(self), ast(o)), res)
+
+  def __div__(self, o):
+    res = self.__v / o
+    return concolic_int(sym_division(ast(self), ast(o)), res)
+
   def _sym_ast(self):
     return self.__sym
 
@@ -522,6 +537,13 @@ class concolic_str(str):
   ## Exercise 4: your code here.
   ## Implement symbolic versions of string length (override __len__)
   ## and contains (override __contains__).
+  def __len__(self):
+    res = len(self.__v)
+    return concolic_int(sym_length(ast(self)), res)
+
+  def __contains__(self, o):
+    res = self.__v.__contains__(o)
+    return concolic_bool(sym_contains(ast(self), ast(o)), res)
 
   def startswith(self, o):
     res = self.__v.startswith(o)
@@ -645,6 +667,14 @@ def mk_str(id):
   if id not in concrete_values:
     concrete_values[id] = ''
   return concolic_str(sym_str(id), concrete_values[id])
+  
+def make_next_constr(cur_list):
+  clen = len(cur_list)
+  constr_expr = ast(True)
+  for i in range(0, clen-1):
+    constr_expr = sym_and(cur_list[i], constr_expr)
+  constr_expr = sym_and(sym_eq(cur_list[clen-1].a, ast(not cur_list[clen-1].b.b)), constr_expr)
+  return constr_expr
 
 def concolic_test(testfunc, maxiter = 100, verbose = 0):
   ## "checked" is the set of constraints we already sent to Z3 for
@@ -686,6 +716,18 @@ def concolic_test(testfunc, maxiter = 100, verbose = 0):
     ## Here's a possible plan of attack:
     ##
     ## - Iterate over the set of branches in cur_path_constr.
+    for i in xrange(0, len(cur_path_constr)):
+        constr = make_next_constr(cur_path_constr[0:i+1])
+        if constr in checked:
+            continue
+        else:
+            checked.add(constr)
+            (ok, model) = fork_and_check(constr)
+            for k, v in concrete_values.items():
+                if k not in model:
+                    model[k] = v
+            if ok == z3.sat:
+                inputs.add(model, cur_path_constr_callers[i])
     ##
     ## - Compute an AST expression for the constraints necessary
     ##   to go the other way on that branch.  You can use existing

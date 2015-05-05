@@ -12,7 +12,14 @@ def newget(query, primary_key):
   ## query object "query", and do so in a symbolic-friendly way.
   ##
   ## Hint: given a SQLalchemy row object r, you can find the name of
-  ## its primary key using r.__table__.primary_key.columns.keys()[0]
+  ## its primary key using r.__table__.primary_key.columns.keys()[0] 
+  ## print type(query)
+  ## print type(primary_key)
+  ret = query.all()
+  for r in ret:
+    pk = r.__table__.primary_key.columns.keys()[0]
+    if primary_key == getattr(r, pk):
+      return r
   return None
 
 sqlalchemy.orm.query.Query.get = newget

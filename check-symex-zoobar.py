@@ -42,7 +42,7 @@ def test_stuff():
   tdb = zoobar.zoodb.transfer_setup()
   tdb.query(zoobar.zoodb.Transfer).delete()
   tdb.commit()
-
+  
   environ = {}
   environ['wsgi.url_scheme'] = 'http'
   environ['wsgi.input'] = 'xxx'
@@ -69,7 +69,8 @@ def test_stuff():
     ## Don't bother trying to construct paths with lots of slashes;
     ## otherwise, the lstrip() code generates lots of paths..
     return
-
+  balance_list_pre = [p.zoobars for p in pdb.query(zoobar.zoodb.Person).all()]
+  balance2 = sum([p.zoobars for p in pdb.query(zoobar.zoodb.Person).all()])
   resp = zoobar.app(environ, startresp)
   if verbose:
     for x in resp:
@@ -79,9 +80,15 @@ def test_stuff():
 
   ## Detect balance mismatch.
   ## When detected, call report_balance_mismatch()
+  balance3 = sum([p.zoobars for p in pdb.query(zoobar.zoodb.Person).all()])
+  if balance2 != balance3:
+    report_balance_mismatch()
 
   ## Detect zoobar theft.
   ## When detected, call report_zoobar_theft()
-
+  balance_list_after = [p.zoobars for p in pdb.query(zoobar.zoodb.Person).all()]
+  for i in range(0, len(balance_list_pre)):
+    if balance_list_pre[i] > balance_list_after[i]:
+      report_zoobar_theft()
 fuzzy.concolic_test(test_stuff, maxiter=2000, verbose=1)
 

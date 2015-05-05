@@ -1,0 +1,99 @@
+Script started on Tue 05 May 2015 01:37:54 AM UTC
+Trying concrete values: {}
+startresp 404 NOT FOUND [('Content-Type', 'text/html'), ('Content-Length', '233'), ('X-XSS-Protection', '0')]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>404 Not Found</title>
+<h1>Not Found</h1>
+<p>The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.</p>
+
+Trying concrete values: {'path': 'fer', 'cookie': '', 'referrer': ''}
+/home/httpd/lab/zoobar/debug.py:23 :: __try : caught exception in function transfer:
+ Traceback (most recent call last):
+  File "/home/httpd/lab/zoobar/debug.py", line 20, in __try
+    return f(*args, **kwargs)
+  File "/home/httpd/lab/zoobar/login.py", line 59, in loginhelper
+    if not logged_in():
+  File "/home/httpd/lab/zoobar/login.py", line 50, in logged_in
+    g.user.checkCookie(request.cookies.get("PyZoobarLogin"))
+  File "/usr/lib/python2.7/dist-packages/werkzeug/local.py", line 338, in __getattr__
+    return getattr(self._get_current_object(), name)
+  File "/usr/lib/python2.7/dist-packages/werkzeug/utils.py", line 71, in __get__
+    value = self.func(obj)
+  File "/home/httpd/lab/symex/symflask.py", line 44, in cookies
+    fuzzy.require(hdr == name + '=' + val)
+  File "/home/httpd/lab/symex/fuzzy.py", line 364, in require
+    raise RequireMismatch()
+RequireMismatch
+
+startresp 500 INTERNAL SERVER ERROR [('Content-Type', 'text/html'), ('Content-Length', '291')]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>500 Internal Server Error</title>
+<h1>Internal Server Error</h1>
+<p>The server encountered an internal error and was unable to complete your request.  Either the server is overloaded or there is an error in the application.</p>
+
+Trying concrete values: {'referrer': '', 'cookie_name': '', 'cookie_val': '', 'cookie': '', '_t_len_path_1': '1', 'path': '\n', '_t_val_path_1_0': '106'}
+startresp 404 NOT FOUND [('Content-Type', 'text/html'), ('Content-Length', '233'), ('X-XSS-Protection', '0')]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>404 Not Found</title>
+<h1>Not Found</h1>
+<p>The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.</p>
+
+Trying concrete values: {'referrer': '', 'cookie_name': 'K', '_t_val_cookie_val_1_0': '52', 'cookie_val': '0', '_t_len_cookie_val_1': '1', '_t_len_cookie_name_1': '1', 'path': 'fer', 'cookie': 'K=0', '_t_val_cookie_name_1_0': '36'}
+startresp 302 FOUND [('Content-Type', 'text/html; charset=utf-8'), ('Content-Length', '317'), ('Location', 'http://zoobarscript/script/login?nexturl=http://zoobarscript/transfer?query'), ('X-XSS-Protection', '0')]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>Redirecting...</title>
+<h1>Redirecting...</h1>
+<p>You should be redirected automatically to target URL: <a href="script/login?nexturl=http://zoobarscript/transfer?query">script/login?nexturl=http://zoobarscript/transfer?query</a>.  If not click the link.
+Trying concrete values: {'cookie': 'K=0', 'referrer': '', 'cookie_name': 'PyZoobarLogin', '_t_val_cookie_val_1_0': '52', '_t_len_cookie_val_1': '1', '_t_len_cookie_name_1': '1', 'path': 'fer', 'cookie_val': '0', '_t_val_cookie_name_1_0': '36'}
+/home/httpd/lab/zoobar/debug.py:23 :: __try : caught exception in function transfer:
+ Traceback (most recent call last):
+  File "/home/httpd/lab/zoobar/debug.py", line 20, in __try
+    return f(*args, **kwargs)
+  File "/home/httpd/lab/zoobar/login.py", line 59, in loginhelper
+    if not logged_in():
+  File "/home/httpd/lab/zoobar/login.py", line 50, in logged_in
+    g.user.checkCookie(request.cookies.get("PyZoobarLogin"))
+  File "/usr/lib/python2.7/dist-packages/werkzeug/local.py", line 338, in __getattr__
+    return getattr(self._get_current_object(), name)
+  File "/usr/lib/python2.7/dist-packages/werkzeug/utils.py", line 71, in __get__
+    value = self.func(obj)
+  File "/home/httpd/lab/symex/symflask.py", line 44, in cookies
+    fuzzy.require(hdr == name + '=' + val)
+  File "/home/httpd/lab/symex/fuzzy.py", line 364, in require
+    raise RequireMismatch()
+RequireMismatch
+
+startresp 500 INTERNAL SERVER ERROR [('Content-Type', 'text/html'), ('Content-Length', '291')]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>500 Internal Server Error</title>
+<h1>Internal Server Error</h1>
+<p>The server encountered an internal error and was unable to complete your request.  Either the server is overloaded or there is an error in the application.</p>
+
+Trying concrete values: {'_t_val_cookie_val_5_0': '26', '_t_val_cookie_name_1_0': '36', '_t_val_cookie_name_2_0': '10', '_t_val_cookie_3_0': '28', 'referrer': '', 'cookie_name': 'ak', '_t_len_cookie_name_1': '2', '_t_val_cookie_val_1_0': '52', '_t_len_cookie_val_1': 'more', '_t_len_cookie_val_2': '5', 'cookie': 'aaC', '_t_len_cookie_1': 'more', 'cookie_val': 'aaaaA', '_t_len_cookie_2': '3', 'path': 'fer'}
+/home/httpd/lab/zoobar/debug.py:23 :: __try : caught exception in function transfer:
+ Traceback (most recent call last):
+  File "/home/httpd/lab/zoobar/debug.py", line 20, in __try
+    return f(*args, **kwargs)
+  File "/home/httpd/lab/zoobar/login.py", line 59, in loginhelper
+    if not logged_in():
+  File "/home/httpd/lab/zoobar/login.py", line 50, in logged_in
+    g.user.checkCookie(request.cookies.get("PyZoobarLogin"))
+  File "/usr/lib/python2.7/dist-packages/werkzeug/local.py", line 338, in __getattr__
+    return getattr(self._get_current_object(), name)
+  File "/usr/lib/python2.7/dist-packages/werkzeug/utils.py", line 71, in __get__
+    value = self.func(obj)
+  File "/home/httpd/lab/symex/symflask.py", line 44, in cookies
+    fuzzy.require(hdr == name + '=' + val)
+  File "/home/httpd/lab/symex/fuzzy.py", line 364, in require
+    raise RequireMismatch()
+RequireMismatch
+
+startresp 500 INTERNAL SERVER ERROR [('Content-Type', 'text/html'), ('Content-Length', '291')]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>500 Internal Server Error</title>
+<h1>Internal Server Error</h1>
+<p>The server encountered an internal error and was unable to complete your request.  Either the server is overloaded or there is an error in the application.</p>
+
+Stopping after 6 iterations
+
+Script done on Tue 05 May 2015 01:38:14 AM UTC
